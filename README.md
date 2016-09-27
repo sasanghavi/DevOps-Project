@@ -1,15 +1,40 @@
 # DevOps-Project
 
-**Team:**
-
+###Team:
 * Anand Varma Chekuri (ACHEKUR)
 * Shrey Sanghavi (SSANGHA)
 
--------
+--
+
+<br/>
 
 ### Build
+---
 
-#### Trigger Builds on Commit
+#### The Setup Process
+
+*Installing Jenkins:*
+
+	sudo yum -y install java
+	sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+	sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+	sudo yum install jenkins
+	sudo systemctl start jenkins.service
+	
+*Installing Dependencies:*
+	
+	sudo yum install -y git
+	sudo yum install -y maven
+	sudo yum install java-1.6.0-openjdk-devel
+	sudo yum install mailx
+	
+
+--
+
+
+<br/>
+
+#### 1. Trigger Builds on Commit
 
 In order to trigger a build every time a commit is pushed to the GIT repo, we use Github Webhooks. The webhook is configured to send out a POST request to Jenkins' GIT plugin every time **push** event is observed by the GIT server.
 
@@ -19,27 +44,24 @@ Also, while configuring a project on Jenkins, we check the "Build when a change 
 
 ![Github WebHook configuration](images/jenkins-trigger.png)
 
----
 
-#### Clean Builds
+--
 
-Lorem Ipsum
 
-#### Handling build success/failures
+#### 2. Clean Builds
 
 Lorem Ipsum
 
-
-#### Trigger Builds on Commit
+#### 3. Handling build success/failures
 
 Lorem Ipsum
 
 
-#### Branch specific builds
+#### 4. Branch specific builds
 
 Lorem Ipsum
 
 
-#### Build Hisory
+#### 5. Build Hisory
 
 Lorem Ipsum
