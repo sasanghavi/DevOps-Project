@@ -28,6 +28,8 @@
 	sudo yum install java-1.6.0-openjdk-devel
 	sudo yum install mailx
 	
+	
+*The project (gson), build-management (maven)* **TODO!**
 
 --
 
@@ -48,13 +50,23 @@ Also, while configuring a project on Jenkins, we check the "Build when a change 
 --
 
 
-#### 2. Clean Builds
+#### 2. Clean Builds, Build Management
 
-Lorem Ipsum
+To ensure that each build happens in a clean and controlled environment, we configured Jenkins to delete the workspace before a new build starts. This prevents running build jobs with stale artifacts from a previous builds.
+
+![Clean workspace before building - Jenkins Config](images/clean-builds.png)
+
+Also, the build script is written to execute **"mvn clean"** before building. This way, we can be sure that the build environment is always new.
+
+![Clean workspace before building - Jenkins Config](images/build-sh.png)
+
+
+--
+
 
 #### 3. Handling build success/failures
 
-Lorem Ipsum
+
 
 
 #### 4. Branch specific builds
