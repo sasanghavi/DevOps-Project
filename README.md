@@ -1,11 +1,16 @@
 # DevOps-Project
 
-###Team:
-* Anand Varma Chekuri (ACHEKUR)
-* Shrey Sanghavi (SSANGHA)
+###Team & Contributions:
+* **Anand Varma Chekuri (ACHEKUR)**
+	* Jenkins Setup & Configuration
+	* Setting up GIT repos and webhook
+	* Readme.md
+* **Shrey Sanghavi (SSANGHA)**
+	* Jenkins Setup & Configuration
+	* Configuring, testing post-build scripts
+	* Screen-cast
 
---
-
+<br/>
 <br/>
 
 ### Build
