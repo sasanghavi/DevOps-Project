@@ -35,7 +35,6 @@
 
 
 <br/>
-
 #### 1. Trigger Builds on Commit
 
 In order to trigger a build every time a commit is pushed to the GIT repo, we use Github Webhooks. The webhook is configured to send out a POST request to Jenkins' GIT plugin every time **push** event is observed by the GIT server.
@@ -49,7 +48,7 @@ Also, while configuring a project on Jenkins, we check the "Build when a change 
 
 --
 
-
+<br/>
 #### 2. Clean Builds, Build Management
 
 To ensure that each build happens in a clean and controlled environment, we configured Jenkins to delete the workspace before a new build starts. This prevents running build jobs with stale artifacts from a previous builds.
@@ -63,17 +62,22 @@ Also, the build script is written to execute **"mvn clean"** before building. Th
 
 --
 
-
+<br/>
 #### 3. Handling build success/failures
+Lorem Ipsum
 
 
+--
 
-
+<br/>
 #### 4. Branch specific builds
 
 Lorem Ipsum
 
 
+--
+
+<br/>
 #### 5. Build Hisory
 
-Lorem Ipsum
+Jenkins comes pre-loaded with the option to browse through the "Build History" for all the configured projects. This view is presented in HTML and can be accessed via a web-browser at the following link: [http://JENKINS_IP:8080/view/All/builds](http://JENKINS_IP:8080/view/All/builds)
