@@ -27,12 +27,13 @@
 	sudo yum install -y maven
 	sudo yum install java-1.6.0-openjdk-devel
 	sudo yum install mailx
-	
-	
-*The project (gson), build-management (maven)* **TODO!**
+
+
+
+For the purpose of the project-deliverable, we decided to use the Google's [**gson**](https://github.com/google/gson) *(JSON library for Java)* as the source code to build and test our CI system with. The configuration management software of choice for the project was **Maven** and therefore Jenkins was configured to demonstrate maven builds on a clone of this code-base.
+
 
 --
-
 
 <br/>
 #### 1. Trigger Builds on Commit
