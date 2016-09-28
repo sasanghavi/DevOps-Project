@@ -43,7 +43,7 @@ In order to trigger a build every time a commit is pushed to the GIT repo, we us
 
 Also, while configuring a project on Jenkins, we check the "Build when a change is pushed to GitHub" options. This completes the trigger configuration from the Jenkins' side and the GIT plugin handles the POST requests made by the webhook.
 
-![Github WebHook configuration](images/jenkins-trigger.png)
+![Jenkins Build Triggers](images/jenkins-trigger.png)
 
 
 --
@@ -53,11 +53,11 @@ Also, while configuring a project on Jenkins, we check the "Build when a change 
 
 To ensure that each build happens in a clean and controlled environment, we configured Jenkins to delete the workspace before a new build starts. This prevents running build jobs with stale artifacts from a previous builds.
 
-![Clean workspace before building - Jenkins Config](images/clean-builds.png)
+![Delete workspace before building - Jenkins Config](images/clean-builds.png)
 
 Also, the build script is written to execute **"mvn clean"** before building. This way, we can be sure that the build environment is always new.
 
-![Clean workspace before building - Jenkins Config](images/build-sh.png)
+![Build Script (Maven) - Jenkins Config](images/build-sh.png)
 
 
 --
@@ -76,7 +76,10 @@ In order to get finer control over what actions need to taken when a build Passe
 <br/>
 #### 4. Branch specific builds
 
-Lorem Ipsum
+To enable and demonstrate CI of multiple branches, we setup multiple Jenkins Projects, one for the "master" branch and one for the "development" branch. This allows us to seperate the configuration for both branches and to track the branches and their build stabilities individually. The projects were configured in such a way that "pushes" made to the development branch triggered a build only on the DEV project and likewise for the master branch, allowing us to track them in isolation.
+
+
+![Jobs for each branch - Jenkins Config](images/multi-branch.png)
 
 
 --
