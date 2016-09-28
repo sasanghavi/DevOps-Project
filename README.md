@@ -64,7 +64,11 @@ Also, the build script is written to execute **"mvn clean"** before building. Th
 
 <br/>
 #### 3. Handling build success/failures
-Lorem Ipsum
+Jenkins comes pre-installed with a plugin that sends out emails to a given set of addresses when a critical event occurs *i.e.* build-fails or when an unstable project becomes stable, etc.
+
+In order to get finer control over what actions need to taken when a build Passes or Fails, we installed and configured the [Hudson Post Build Task](http://wiki.hudson-ci.org/display/HUDSON/Post+build+task) plugin. This plugin allows us to configure custom shell scripts to run upon job completion, based on the return value (PASSED or FAILED). We used the following script to send out an email to a particular recepient every time a build passes, in-order to demonstrate post-build script functionality.
+
+	echo "Build was successful" | mail -s "[Jenkins][GSON Fork] Build Success" ssangha@ncsu.edu
 
 
 --
