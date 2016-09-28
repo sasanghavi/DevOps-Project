@@ -1,5 +1,9 @@
 # DevOps-Project
 
+   [Team] (#team--contributions)    |   [Setting Up] (#the-setup-process)    |   [Config](#config)   |  [Screencast](#screencast)   |   [Build Server Tasks](#build-server-tasks)
+   
+   [Trigger builds using hooks](#1-trigger-builds-on-commit)   |   [Build Management](#2-clean-builds-build-management)   |   [Build Success/Failures](#3-handling-build-successfailures)   |   [Branch specific builds](#4-branch-specific-builds)   |   [Build History](#5-build-hisory) 
+
 ###Team & Contributions:
 * **Anand Varma Chekuri (ACHEKUR)**
 	* Jenkins Setup & Configuration
@@ -45,7 +49,7 @@ Post installation, most of the configuration is done using the web-interface for
 [**https://www.youtube.com/watch?v=9cRpP7V38Ag**](https://www.youtube.com/watch?v=9cRpP7V38Ag)
 
 --
-
+### Build Server Tasks
 <br/>
 #### 1. Trigger Builds on Commit
 
