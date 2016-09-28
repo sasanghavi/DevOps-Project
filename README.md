@@ -41,7 +41,7 @@ For the purpose of the project-deliverable, we decided to use the Google's [**gs
 
 Post installation, most of the configuration is done using the web-interface for Jenkins [http://JENKINS_IP:8080](http://JENKINS_IP:8080). The resulting configuration files were backed up from "/var/lib/jenkins/" and added to the current GIT repo [here](https://github.ncsu.edu/achekur/DevOps-Project/tree/master/jenkins_config). The included configuration contains the config.xml files for Jenkins and for both the Jobs *(one for each branch)* that were setup.
 
---
+---
 
 <br/>
 #### 1. Trigger Builds on Commit
