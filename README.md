@@ -33,6 +33,10 @@
 For the purpose of the project-deliverable, we decided to use the Google's [**gson**](https://github.com/google/gson) *(JSON library for Java)* as the source code to build and test our CI system with. The configuration management software of choice for the project was **Maven** and therefore Jenkins was configured to demonstrate maven builds on a clone of this code-base.
 
 
+#### Config
+
+Post installation, most of the configuration is done using the web-interface for Jenkins [http://JENKINS_IP:8080](http://JENKINS_IP:8080). The resulting configuration files were backed up from "/var/lib/jenkins/" and added to the current GIT repo [here](https://github.ncsu.edu/achekur/DevOps-Project/tree/master/jenkins_config). The included configuration contains the config.xml files for Jenkins and for both the Jobs *(one for each branch)* that were setup.
+
 --
 
 <br/>
