@@ -17,7 +17,7 @@
 
 <br/>
 #### System under Test
-For the purpose of the project-deliverable, we decided to use the Google's [**gson**](https://github.com/google/gson) (JSON library for Java) as the source code to build and test our CI system with. The configuration management software of choice for the project was **Maven** and Jenkins was configured to demonstrate maven builds on a clone of this code-base.
+For the purpose of the project-deliverable, we decided to use the Google's [**GSON**](https://github.com/google/gson) (JSON library for Java) as the source code to build and test our CI system with. The configuration management software of choice for the project was **Maven** and Jenkins was configured to demonstrate maven builds on a clone of this code-base.
 
 <br/>
 ### Test
@@ -25,7 +25,7 @@ For the purpose of the project-deliverable, we decided to use the Google's [**gs
 
 #### Test Suites
 
-The GSON project comes with it's own JUnit test cases *(nearly 1000 individual tests)* and we used the **Surefire** Maven Plugin to generate XML reports of the results of these test cases. The reports generated were published using the JUnit plugin and displayed in a tabular fashion using the Test Result Analyzer plugin for Jenkins.
+The GSON project comes with it's own JUnit test cases *(nearly 1000 individual tests)* and we used the [Surefire Maven Plugin](https://maven.apache.org/surefire/maven-surefire-plugin/) to generate XML reports of the results of these test cases. The reports generated were published using the JUnit plugin and displayed in a tabular fashion using the [Test Result Analyzer](http://wiki.jenkins-ci.org/display/JENKINS/Test+Results+Analyzer+Plugin) plugin for Jenkins.
 
 	mvn surefire-report:report
 
@@ -33,7 +33,7 @@ The GSON project comes with it's own JUnit test cases *(nearly 1000 individual t
 )
 
 
-Emma was used to gather Test Coverage information for our Java code-base. We decided to use the [Emma Maven plugin](http://emma.sourceforge.net/maven-emma-plugin/) to run test coverage analysis on our code and generate XML reports. The reports are then displayed on Jenkins using the [Emma plugin](https://wiki.jenkins-ci.org/display/JENKINS/Emma+Plugin).
+Emma was used to gather **Test Coverage** information for our Java code-base. We decided to use the [Emma Maven plugin](http://emma.sourceforge.net/maven-emma-plugin/) to run test coverage analysis on our code and generate XML reports. The reports are then displayed on Jenkins using the [Emma plugin](https://wiki.jenkins-ci.org/display/JENKINS/Emma+Plugin).
 
 	mvn emma:emma
 
@@ -42,9 +42,9 @@ Emma was used to gather Test Coverage information for our Java code-base. We dec
 <br/>
 #### Advanced Testing
 
-We have decided to demonstrate this section using the **Randoop** Test Generation tool for Java. This tool generates JUnit test cases for a given project which can be used to find Errors and to extend Regression Tests to improved coverage.
+We have decided to demonstrate this section using the [Randoop](https://randoop.github.io/randoop/) Test Generation tool for Java. This tool generates JUnit test cases for the input project which can be used to find Errors and to extend Regression Tests to improved coverage.
 
-We ran the randoop tool on our "gson" project and were able to  furhter boost the already good test-coverage of this project.
+We ran the randoop tool on our GSON project, added the newly generated unit tests to the code-base and were able to further boost the already good test-coverage of this project.
 
 	java -classpath "randoop-all-3.0.6.jar:gson.jar" randoop.main.Main gentests --classlist=myclasses.txt --timelimit=300
 
@@ -57,7 +57,7 @@ We ran the randoop tool on our "gson" project and were able to  furhter boost th
 
 #### Basic Analysis
 
-To demonstrate the ability to run static-analysis tools on the codebase, we decided to use PMD, which we learnt was widely used in the industry. To enable PMD analysis of our gson project, we used the Maven PMD plugin. The plugin generates XML reports for each run which were setup to be consumed by the PMD Jenkins plugin and displayed on the Jenkins web console.
+To demonstrate the ability to run static-analysis tools on the codebase, we decided to use PMD, which we learnt was widely used in the industry. To enable PMD analysis of our GSON project, we used the [Maven PMD plugin](https://maven.apache.org/plugins/maven-pmd-plugin/). The plugin generates XML reports for each run which were setup to be consumed by the [PMD plugin](http://wiki.jenkins-ci.org/x/GAAHAQ) for Jenkins and displayed the reports on the Jenkins web console.
 
 We also configured our test-pipeline and Jenkins framework to run the Findbugs and CheckStyle tools along with PMD.
 
