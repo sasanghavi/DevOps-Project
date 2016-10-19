@@ -67,8 +67,24 @@ We also configured our test-pipeline and Jenkins framework to run the Findbugs a
 
 We have decided to implement some of our custom metrics reporting using the CheckStyle tool and the CheckStyle Jenkins interface that we already setup. This tool allowed us to easily write custom rules and integrate them into our pipeline:
 
-* **Max Condition**
+* **Max Condition** 
+Conditions within an if statement in a function. We implemented this using Checkstyle's BooleanExpressionComplexity metric.
+To configure the check with 4 allowed operation in boolean expression:
+```
+<module name="BooleanExpressionComplexity">
+    <property name="max" value="4"/>
+</module>
+```
 * **Long Method**
+Detect a long methods. We implemented this using Checkstyle's MethodLength size violation check.
+To configure the check so that it accepts methods with at most 60 lines, not counting empty lines and single line comments:
+```
+<module name="MethodLength">
+   <property name="tokens" value="METHOD_DEF"/>
+   <property name="max" value="60"/>
+   <property name="countEmpty" value="false"/>
+</module>
+```
 
 The rest of the custom metrics were implemented as command line scripts that were added as part of the build process:
 
@@ -104,4 +120,4 @@ To implement gating of builds that do not pass our static-analysis checks, we ha
 	
 <br/>	
 ### Screen-cast
-[**MileStone 2 Screencast**]()
+[**MileStone 2 Screencast**](https://www.youtube.com/watch?v=XMSMSKcDsUg)
