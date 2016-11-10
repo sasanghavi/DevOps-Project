@@ -1,4 +1,4 @@
-var nr = require('newrelic');
+//var nr = require('newrelic');
 var redis = require('redis')
 var multer  = require('multer')
 var express = require('express')
@@ -23,19 +23,22 @@ app.use(function(req, res, next)
 });
 
 app.get('/', function(req, res) {
-  res.send('<h2>hello world</h2>')
+  res.send('<h2>I am your master!</h2>')
+});
+
+
+app.get('/deploy', function(req, res) {
+  res.send('<h2>Got new code. Deploy!</h2>')
 });
 
 
 
 // HTTP SERVER
-var server = app.listen(3000, function () {
+var server = app.listen(2000, function () {
 
   var host = server.address().address
   var port = server.address().port
 
-  client.lpush("servers", "http://"+redisIP+":"+port , function(err, data){
-      console.log('Example app listening at http://%s:%s', host, port)
-  });
+  console.log('Example app listening at http://%s:%s', host, port)
 
 });
