@@ -59,11 +59,11 @@ app.get('/deploy', function(req, res) {
 					    console.log("Ansible Inventory file generated, running playbook!");
 
 					    // Run playbook
-	  					exec('sleep 10',
+	  					exec('sleep 30',
 						  function (error, stdout, stderr) {
 						  		console.log("sleep done...")
 
-						      exec('ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ../playbook.yml',
+						      exec('ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ../app_playbook.yml',
 							  function (error2, stdout2, stderr2) {
 							    console.log('stdout: ' + stdout2);
 							    console.log('stderr: ' + stderr2);
