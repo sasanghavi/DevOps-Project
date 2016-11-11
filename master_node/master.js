@@ -10,7 +10,7 @@ const exec = require('child_process').exec;
 var app = express()
 // REDIS
 
-var redisIP = '104.131.119.23'
+var redisIP = '127.0.0.1'
 var client = redis.createClient(6379, redisIP, {})
 
 ///////////// WEB ROUTES

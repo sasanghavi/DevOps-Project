@@ -87,23 +87,3 @@
         chdir: /root/M3/load_balancer
 
 
-
-    # - name: Add repository
-    #   yum_repository:
-    #     name: newrelic-repo
-    #     description: NewRelic repo
-    #     baseurl: https://download.newrelic.com/pub/newrelic/el5/i386/newrelic-repo-5-3.noarch.rpm
-
-    # - name: Install NewRelic MonitorD
-    #   yum: 
-    #     pkg: newrelic-sysmond
-    #     state: installed
-    #     update_cache: yes
-
-    # - name: Set Key for Monitoring
-    #   shell: nrsysmond-config --set license_key=de6aa67291303641a6bc486f90545d3eb5af4e83
-
-    # - name: run newrelic-sysmond
-    #   shell: /etc/init.d/newrelic-sysmond start
-
-
