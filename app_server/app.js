@@ -13,6 +13,35 @@ var client = redis.createClient(6379, redisIP, {})
 
 var options = {};
 
+
+///////// SELF IP //////////////
+var myIP;
+
+var os = require('os');
+var ifaces = os.networkInterfaces();
+
+Object.keys(ifaces).forEach(function (ifname) {
+  var alias = 0;
+  ifaces[ifname].forEach(function (iface) {
+    if ('IPv4' !== iface.family || iface.internal !== false) {
+      // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+      return;
+    }
+
+    if (alias >= 1) {
+      // this single interface has multiple ipv4 addresses
+      //console.log(ifname + ':' + alias, iface.address);
+    } else {
+      // this interface has only one ipv4 adress
+      console.log(ifname, iface.address);
+      myIP = iface.address
+    }
+    ++alias;
+  });
+});
+
+
+
 ///////////// WEB ROUTES
 
 // Add hook to make it easier to get all visited URLS.
@@ -23,7 +52,7 @@ app.use(function(req, res, next)
 });
 
 app.get('/', function(req, res) {
-  res.send('<h2>hello world</h2>')
+  res.send('<h2>hello world from </h2>' + myIP)  
 });
 
 
@@ -34,8 +63,8 @@ var server = app.listen(3000, function () {
   var host = server.address().address
   var port = server.address().port
 
-  client.lpush("servers", "http://"+redisIP+":"+port , function(err, data){
-      console.log('Example app listening at http://%s:%s', host, port)
+  client.lpush("servers", "http://"+myIP+":"+port , function(err, data){
+      console.log('Example app listening at http://%s:%s', myIP, port)
   });
 
 });
