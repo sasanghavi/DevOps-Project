@@ -52,7 +52,7 @@ app.use(function(req, res, next)
 });
 
 app.get('/', function(req, res) {
-  res.send('<h2>hello world from </h2>' + myIP)  
+  res.send('<h2>Hello World,</h2>' + myIP)  
 });
 
 

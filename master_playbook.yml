@@ -62,19 +62,30 @@
       args:
           chdir: /root/
 
+    - name: Install forever
+      shell: npm install -g forever
+
     - name: NPM install
       shell: npm install
       args:
         chdir: /root/M3/master_node
 
-
-    - name: Install forever
-      shell: npm install -g forever
-
     - name: Run Server
       shell: forever start master.js
       args:
-        chdir: /root/M3/app_server
+        chdir: /root/M3/master_node
+
+    # Start Load Balancer
+    - name: NPM install
+      shell: npm install
+      args:
+        chdir: /root/M3/load_balancer
+
+    - name: Run Server
+      shell: forever start main.js
+      args:
+        chdir: /root/M3/load_balancer
+
 
 
     # - name: Add repository
