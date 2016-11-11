@@ -59,7 +59,7 @@ app.get('/deploy', function(req, res) {
 					    console.log("Ansible Inventory file generated, running playbook!");
 
 					    // Run playbook
-	  					exec('sleep 30',
+	  					exec('sleep 10',
 						  function (error, stdout, stderr) {
 						  		console.log("sleep done...")
 

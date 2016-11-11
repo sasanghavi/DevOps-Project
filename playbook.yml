@@ -3,11 +3,6 @@
   become: yes
   become_user: root
 
-  roles:
-     - williamyeh.nodejs
-     
-  vars:
-    nodejs_version: 4.0
 
   tasks:
     - name: Test connection
@@ -19,6 +14,8 @@
         state: installed
         update_cache: yes
 
+
+    # Install & start REDIS
     - name: Download Redis Sources
       get_url:
         url: http://download.redis.io/releases/redis-stable.tar.gz
@@ -37,6 +34,16 @@
 
     - name: Run Redis Server
       shell: redis-server --protected-mode no &
+
+
+    # Install Node.JS
+    - name: Setup Node repo
+      shell: curl --silent --location https://rpm.nodesource.com/setup_6.x | bash -
+
+    - name: Install Node
+      shell: yum -y install nodejs
+
+
 
     # - name: Add repository
     #   yum_repository:
