@@ -54,6 +54,14 @@
         state: installed
         update_cache: yes
 
+    # Install Ansible
+    - name: Add EPEL repo
+      shell: rpm -iUvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+
+    - name: Install Ansible
+      shell: yum install -y ansible
+
+
 
 
     # Pull latesest STABLE code
@@ -71,7 +79,7 @@
         chdir: /root/M3/master_node
 
     - name: Run Server
-      shell: forever start master.js
+      shell: forever start --watch master.js
       args:
         chdir: /root/M3/master_node
 
@@ -82,7 +90,7 @@
         chdir: /root/M3/load_balancer
 
     - name: Run Server
-      shell: forever start main.js
+      shell: forever start --watch main.js
       args:
         chdir: /root/M3/load_balancer
 

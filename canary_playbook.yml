@@ -34,7 +34,7 @@
 
     # Pull latesest STABLE code
     - name: Pull Latest code from GIT
-      shell: git clone -b M3 https://github.com/sasanghavi/M3.git
+      shell: git clone -b canary https://github.com/sasanghavi/M3.git
       args:
           chdir: /root/
 

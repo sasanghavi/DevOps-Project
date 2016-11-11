@@ -7,7 +7,7 @@ var http      = require('http');
 var httpProxy = require('http-proxy')
 var app = express()
 // REDIS
-var client = redis.createClient(6379, '104.131.119.23', {})
+var client = redis.createClient(6379, '127.0.0.1', {})
 
 
 var options = {};

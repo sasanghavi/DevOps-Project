@@ -8,8 +8,26 @@ var httpProxy = require('http-proxy')
 var app = express()
 // REDIS
 
-var redisIP = '104.131.119.23'
-var client = redis.createClient(6379, redisIP, {})
+var redisIP;
+var client;
+fs.readFile('/root/redisIP', 'utf8', function (err,data) {
+  if (err) {
+    return console.log(err);
+  }
+  console.log("read this:" + data);
+  redisIP = data;
+  client = redis.createClient(6379, redisIP, {})
+
+  // HTTP SERVER
+  var server = app.listen(3000, function () {
+    var host = server.address().address
+    var port = server.address().port
+
+    client.lpush("servers", "http://"+myIP+":"+port , function(err, data){
+      console.log('Example app listening at http://%s:%s', myIP, port)
+    });
+  });
+});
 
 var options = {};
 
@@ -52,19 +70,15 @@ app.use(function(req, res, next)
 });
 
 app.get('/', function(req, res) {
-  res.send('<h2>Hello World,</h2>' + myIP)  
-});
+  client.get("feature1", function(err,value){ 
+    console.log(value);
+    var footer = "<hr/> Request Served by http://" + myIP + ":"+req.socket.server.address().port
 
-
-
-// HTTP SERVER
-var server = app.listen(3000, function () {
-
-  var host = server.address().address
-  var port = server.address().port
-
-  client.lpush("servers", "http://"+myIP+":"+port , function(err, data){
-      console.log('Example app listening at http://%s:%s', myIP, port)
+    if (value == "true")
+      res.send('<h2>Hello World!</h2>' + "Feature!!!" + footer)
+    else
+      res.send('<h2>Hello World!</h2>' + footer)
   });
 
 });
+
