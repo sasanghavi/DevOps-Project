@@ -3,8 +3,8 @@
   become: yes
   become_user: root
 
-  roles:
-    - williamyeh.nodejs
+  # roles:
+  #   - williamyeh.nodejs
   vars:
     nodejs_version: 4.0
 
@@ -12,28 +12,47 @@
     - name: Test connection
       ping: 
 
-    - name: Install GCC
-      yum: 
-        pkg: gcc
-        state: installed
-        update_cache: yes
+    # - name: Install GCC
+    #   yum: 
+    #     pkg: gcc
+    #     state: installed
+    #     update_cache: yes
 
-    - name: Download Redis Sources
-      get_url:
-        url: http://download.redis.io/releases/redis-stable.tar.gz
-        dest: /root/redis.tar
-      register: download_done
+    # - name: Download Redis Sources
+    #   get_url:
+    #     url: http://download.redis.io/releases/redis-stable.tar.gz
+    #     dest: /root/redis.tar
+    #   register: download_done
 
-    - name: Extract Package
-      unarchive: 
-        src: /root/redis.tar
-        dest: /root/
-        copy: no
-      when: download_done|changed
+    # - name: Extract Package
+    #   unarchive: 
+    #     src: /root/redis.tar
+    #     dest: /root/
+    #     copy: no
+    #   when: download_done|changed
 
-    - name: Make & Install
-      make: chdir=/root/redis-stable/ target=install
+    # - name: Make & Install
+    #   make: chdir=/root/redis-stable/ target=install
 
-    - name: Run Redis Server
-      shell: redis-server --protected-mode no &
+    # - name: Run Redis Server
+    #   shell: redis-server --protected-mode no &
+
+    # - name: Add repository
+    #   yum_repository:
+    #     name: newrelic-repo
+    #     description: NewRelic repo
+    #     baseurl: https://download.newrelic.com/pub/newrelic/el5/i386/newrelic-repo-5-3.noarch.rpm
+
+    # - name: Install NewRelic MonitorD
+    #   yum: 
+    #     pkg: newrelic-sysmond
+    #     state: installed
+    #     update_cache: yes
+
+    # - name: Set Key for Monitoring
+    #   shell: nrsysmond-config --set license_key=de6aa67291303641a6bc486f90545d3eb5af4e83
+
+    # - name: run newrelic-sysmond
+    #   shell: /etc/init.d/newrelic-sysmond start
+
 
