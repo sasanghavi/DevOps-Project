@@ -13,8 +13,6 @@ var app = express()
 var redisIP = '104.131.119.23'
 var client = redis.createClient(6379, redisIP, {})
 
-var options = {};
-
 ///////////// WEB ROUTES
 
 // Add hook to make it easier to get all visited URLS.
@@ -32,7 +30,7 @@ app.get('/', function(req, res) {
 app.get('/deploy', function(req, res) {
     res.send('<h2>Got new code. Deploy!</h2>')
 
-    var name = "AutoScaling APP";
+    var name = "App";
 	var region = "nyc2";
 	var image = "centos-6-5-x64";
 	client.createDroplet(name, region, image, function(err, resp, body)
@@ -61,13 +59,18 @@ app.get('/deploy', function(req, res) {
 					    console.log("Ansible Inventory file generated, running playbook!");
 
 					    // Run playbook
-	  					exec('ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ../playbook.yml',
+	  					exec('sleep 30',
 						  function (error, stdout, stderr) {
-						    console.log('stdout: ' + stdout);
-						    console.log('stderr: ' + stderr);
-						    if (error !== null) {
-						      console.log('exec error: ' + error);
-						    }
+						  		console.log("sleep done...")
+
+						      exec('ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ../playbook.yml',
+							  function (error2, stdout2, stderr2) {
+							    console.log('stdout: ' + stdout2);
+							    console.log('stderr: ' + stderr2);
+							    if (error2 !== null) {
+							      console.log('exec error: ' + error2);
+							    }
+								});
 						});
 
 					}); 
@@ -147,6 +150,7 @@ var client =
 		};
 
 		console.log("Attempting to create Droplet: "+ JSON.stringify(data) + "\n" );
+		console.log("Headers:" + JSON.stringify(headers) );
 
 		needle.post("https://api.digitalocean.com/v2/droplets", data, {headers:headers,json:true}, onResponse );
 	},
