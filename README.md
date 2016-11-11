@@ -23,7 +23,8 @@ We have used Ansible as the Configuration Management Tool and Jenkins as the Bui
 #### Automatic configuration of production environment
 * We wrote two ansible yml script which :
  - One would run on local machine which would spin up master and deploy on production.
- - The other would run on master server and would be responsible to deploy canary builds by creating new droplets.
+ - The other would run on master server and would be responsible to deploy stable/unstable builds by creating new droplets.
+
 
 #### Metrics and alerts
 * The folder named [Monitor](https://github.com/sasanghavi/M3/tree/M3/Monitor) contains the scripts that deal with metrics monitoring
