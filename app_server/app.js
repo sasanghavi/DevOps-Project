@@ -9,27 +9,29 @@ var app = express()
 // REDIS
 
 var redisIP;
-var client;
-fs.readFile('/root/redisIP', 'utf8', function (err,data) {
-  if (err) {
-    return console.log(err);
-  }
-  console.log("read this:" + data);
-  redisIP = data;
-  client = redis.createClient(6379, redisIP, {})
+var redis_client;
+//fs.readFile('/root/redisIP', 'utf8', function (err,data) {
+//  if (err) {
+//    return console.log(err);
+//  }
+//  console.log("read this:" + data);
+//  });
+redisIP = "159.203.120.47";
+  redis_client = redis.createClient(6379, redisIP, {})
 
   // HTTP SERVER
-  var server = app.listen(3000, function () {
+  var server = app.listen(3090, function () {
     var host = server.address().address
     var port = server.address().port
-
-    client.lpush("servers", "http://"+myIP+":"+port , function(err, data){
+    console.log( "http://"+myIP+":"+port)
+    redis_client.lpush("servers", "http://"+myIP+":"+port , function(err, data){
       console.log('Example app listening at http://%s:%s', myIP, port)
     });
   });
-});
-
-var options = {};
+//});
+console.log("IP : "+myIP)
+var options = {
+};
 
 
 ///////// SELF IP //////////////
@@ -70,7 +72,7 @@ app.use(function(req, res, next)
 });
 
 app.get('/', function(req, res) {
-  client.get("feature1", function(err,value){ 
+  redis_client.get("feature1", function(err,value){ 
     console.log(value);
     var footer = "<hr/> Request Served by http://" + myIP + ":"+req.socket.server.address().port
 
