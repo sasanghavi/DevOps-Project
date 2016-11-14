@@ -1,0 +1,97 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+
+
+  tasks:
+    - name: Test connection
+      ping: 
+
+    - name: Install GCC
+      yum: 
+        pkg: gcc
+        state: installed
+        update_cache: yes
+
+
+    # Install & start REDIS
+    - name: Download Redis Sources
+      get_url:
+        url: http://download.redis.io/releases/redis-stable.tar.gz
+        dest: /root/redis.tar
+      register: download_done
+
+    - name: Extract Package
+      unarchive: 
+        src: /root/redis.tar
+        dest: /root/
+        copy: no
+      when: download_done|changed
+
+    - name: Make & Install
+      make: chdir=/root/redis-stable/ target=install
+
+    - name: Run Redis Server
+      shell: redis-server --protected-mode no &
+
+
+    # Install Node.JS
+    - name: Setup Node repo
+      shell: curl --silent --location https://rpm.nodesource.com/setup_6.x | bash -
+
+    - name: Install Node
+      yum:
+        pkg: nodejs 
+        state: installed
+        update_cache: yes
+
+
+    # Install GIT
+    - name: Install GIT
+      yum:
+        pkg: git 
+        state: installed
+        update_cache: yes
+
+    # Install Ansible
+    - name: Add EPEL repo
+      shell: rpm -iUvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm
+
+    - name: Install Ansible
+      shell: yum install -y ansible
+
+
+
+
+    # Pull latesest STABLE code
+    - name: Pull Latest code from GIT
+      shell: git clone -b M3 https://github.com/sasanghavi/M3.git
+      args:
+          chdir: /root/
+
+    - name: Install forever
+      shell: npm install -g forever
+
+    - name: NPM install
+      shell: npm install
+      args:
+        chdir: /root/M3/master_node
+
+    - name: Run Server
+      shell: forever start --watch master.js
+      args:
+        chdir: /root/M3/master_node
+
+    # Start Load Balancer
+    - name: NPM install
+      shell: npm install
+      args:
+        chdir: /root/M3/load_balancer
+
+    - name: Run Server
+      shell: forever start --watch main.js
+      args:
+        chdir: /root/M3/load_balancer
+
+
