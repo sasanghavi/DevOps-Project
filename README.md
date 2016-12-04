@@ -1,106 +1,52 @@
-# DevOps-Project
-
-   [Team] (#team--contributions)    |   [Setting Up] (#the-setup-process)    |   [Config](#config)   |  [Screencast](#screencast)   |   [Build Server Tasks](#build-server-tasks)
-   
-   [Trigger builds using hooks](#1-trigger-builds-on-commit)   |   [Build Management](#2-clean-builds-build-management)   |   [Build Success/Failures](#3-handling-build-successfailures)   |   [Branch specific builds](#4-branch-specific-builds)   |   [Build History](#5-build-hisory) 
-
-###Team & Contributions:
-* **Anand Varma Chekuri (ACHEKUR)**
-	* Jenkins Setup & Configuration
-	* Setting up GIT repos and webhook
-	* Readme.md
-* **Shrey Sanghavi (SSANGHA)**
-	* Jenkins Setup & Configuration
-	* Configuring, testing post-build scripts
-	* Screen-cast
-
-<br/>
-
-### Build
----
-
-#### The Setup Process
-
-*Installing Jenkins:*
-
-	sudo yum -y install java
-	sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
-	sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
-	sudo yum install jenkins
-	sudo systemctl start jenkins.service
-	
-*Installing Dependencies:*
-	
-	sudo yum install -y git
-	sudo yum install -y maven
-	sudo yum install java-1.6.0-openjdk-devel
-	sudo yum install mailx
+# DevOps-Project *(MileStone - 3)*
 
 
 
-For the purpose of the project-deliverable, we decided to use the Google's [**gson**](https://github.com/google/gson) *(JSON library for Java)* as the source code to build and test our CI system with. The configuration management software of choice for the project was **Maven** and therefore Jenkins was configured to demonstrate maven builds on a clone of this code-base.
+### Introduction
+<img width="1050" alt="screen shot 2016-11-11 at 12 43 32 am" src="https://cloud.githubusercontent.com/assets/4195083/20205567/ef1131b4-a7a7-11e6-8b87-5e2ae4d9c571.png">
 
+For this milestone, we have created droplets on Digital Ocean that would act as different servers.
+* Droplet 1: App server/Redis/Proxy server - Master
+* Droplets - n number of droplets acting as proxies
+* Droplet 3: Server for Jenkins
 
-#### Config
+We have used the code from HW1 for spinning up digital ocean droplets using 'needle' api and creating the inventory file entry that is read by ansible playbook.
 
-Post installation, most of the configuration is done using the web-interface for Jenkins [http://JENKINS_IP:8080](http://JENKINS_IP:8080). The resulting configuration files were backed up from "/var/lib/jenkins/" and added to the current GIT repo [here](https://github.ncsu.edu/achekur/DevOps-Project/tree/master/jenkins_config). The included configuration contains the config.xml files for Jenkins and for both the Jobs *(one for each branch)* that were setup.
+We have used Ansible as the Configuration Management Tool and Jenkins as the Build Server. We have used the node js app used in the queues workshop and added Jasmine Node Js Tests and performed Checkstyle analysis using JSHint.
 
-#### Screencast
-[**https://www.youtube.com/watch?v=9cRpP7V38Ag**](https://www.youtube.com/watch?v=9cRpP7V38Ag)
+### Tasks
 
---
-### Build Server Tasks
-<br/>
-#### 1. Trigger Builds on Commit
+#### Triggered, remote deployment
+* We have used Jenkins as the Build Server and configured a job to track the local git repository for our node js application. We have used a on push Github Webhook for continuous integration. This hook tracks the status of the build. If the build fails due to either test failure or failure from Checkstyle (JSHint) analysis, an email notification is triggered to the user.
+* We have used a package Jasmine with Node JS for testing our node js app. It is mentioned in package.json under scripts.  [package.json](https://github.com/sasanghavi/M3/tree/M3/App/package.json). As Jasmine requires the tests to be *Spec.js and the test file to be under the Spec directory, we have implemented it as shown. [spec](https://github.com/sasanghavi/M3/tree/M3/App/spec) directory
+* We have used Checkstyle with JSHint which has been configured in the Jenkins job `jshint --reporter=checkstyle $WORKSPACE/app_server/app.js > checkstyle-result.xml`.
+* On a successful build completion, Jenkins would trigger a deployment of the changes to the m3 or dev deployment server based on the repo the code is committed to. A curl request would be sent to the master server and if `/deploy` is requested, we would create a new production environment while if `/canary` is requested, we would deplot the changes to the canary build.
 
-In order to trigger a build every time a commit is pushed to the GIT repo, we use Github Webhooks. The webhook is configured to send out a POST request to Jenkins' GIT plugin every time **push** event is observed by the GIT server.
+#### Automatic configuration of production environment
+* We wrote two ansible yml script which :
+ - One would run on local machine which would spin up master and deploy on production.
+ - The other would run on master server and would be responsible to deploy canary builds by creating new droplets.
 
-![Github WebHook configuration](images/github-webhook.png)
+#### Metrics and alerts
+* We have used NewRelic for monitoring purposes.
+* Using servers monitoring and setting up alerts policies, we were able to configure metrics like CPU usage/ Memory usage/ Disk IO usage etc. We set alerts if CPU usage > 47% for 5 minutes and mem usage reached 90% for 5 minutes.
+* Using New Relic channels, we were able to configure our email addresses in New Relic. Also, we set up a webhook on our master server which acts as a receiving webhook for the application from NewRelic. After configuring the hook on new relic, we were able to trigger deployments of the server based on the rules set for alerts.
 
-Also, while configuring a project on Jenkins, we check the "Build when a change is pushed to GitHub" options. This completes the trigger configuration from the Jenkins' side and the GIT plugin handles the POST requests made by the webhook.
+#### Triggered Autoscaling of production environment
+* As an extension of the monitoring scripts, we have included Autoscaling service inside the mon.sh file.
+* Whenever there is an over-utilization of CPU/Memory, we make a curl request to `/deploy` in the master server. This would create a new vm with the code from M3 branch. This vm's entry would be added to load balancer which facilitates the Autoscaling functionality.
 
-![Jenkins Build Triggers](images/jenkins-trigger.png)
+#### Feature Flags
+* We have used a Global Redis Store to maintain the value of feature flag setting. We used another Digital Ocean droplet as the Redis Server by installing Redis as follows `apt-get install redis-server`. Further modified the file `/etc/redis/redis.conf` and updated the value `bind 127.0.0.1` to `bind 0.0.0.0` to set up remote access to redis server on port 6379
+* We have created the feature flag functionality for both deploy and canary. We set the feature flag using redis cli and then, get the value of the flag inside the server. Based on the flag value, we display different messages to the user on accessing the / endpoint, which would toggle the message between `Hello World! Feature!!!` and `Hello World!`for application server and `Hello World! Feature!!! - Canary` and `Hello World! - Canary` for the canary branch.
 
+#### Canary releasing
+* We have a branch named 'canary' for canary release. The process for spinning up a droplet, automatic configuration management and triggered remote deployments for this server are identical to the actual master server as mentioned in first two steps
+* Canary Release - Any changes in the branch displayed on the canary deployments. [app](https://github.com/sasanghavi/M3/tree/Canary/app-server/app.js)
+* We have created a http proxy server on master droplet that would handle routing to Application server and Canary Servers based on the number of available servers in master.
 
---
+### Screencast
 
-<br/>
-#### 2. Clean Builds, Build Management
+[Milestone 3 - Demo - Part 1](https://youtu.be/Htp2a62VSJs)
+[Milestone 3 - Demo - Part 2](https://youtu.be/Hzk7tUYMW3I)
 
-To ensure that each build happens in a clean and controlled environment, we configured Jenkins to delete the workspace before a new build starts. This prevents running build jobs with stale artifacts from a previous builds.
-
-![Delete workspace before building - Jenkins Config](images/clean-builds.png)
-
-Also, the build script is written to execute **"mvn clean"** before building. This way, we can be sure that the build environment is always new.
-
-![Build Script (Maven) - Jenkins Config](images/build-sh.png)
-
-
---
-
-<br/>
-#### 3. Handling build success/failures
-Jenkins comes pre-installed with a plugin that sends out emails to a given set of addresses when a critical event occurs *i.e.* build-fails or when an unstable project becomes stable, etc.
-
-In order to get finer control over what actions need to taken when a build Passes or Fails, we installed and configured the [Hudson Post Build Task](http://wiki.hudson-ci.org/display/HUDSON/Post+build+task) plugin. This plugin allows us to configure custom shell scripts to run upon job completion, based on the return value (PASSED or FAILED). We used the following script to send out an email to a particular recepient every time a build passes, in-order to demonstrate post-build script functionality.
-
-	echo "Build was successful" | mail -s "[Jenkins][GSON Fork] Build Success" ssangha@ncsu.edu
-
-
---
-
-<br/>
-#### 4. Branch specific builds
-
-To enable and demonstrate CI of multiple branches, we setup multiple Jenkins Projects, one for the "master" branch and one for the "development" branch. This allows us to seperate the configuration for both branches and to track the branches and their build stabilities individually. The projects were configured in such a way that "pushes" made to the development branch triggered a build only on the DEV project and likewise for the master branch, allowing us to track them in isolation.
-
-
-![Jobs for each branch - Jenkins Config](images/multi-branch.png)
-
-
---
-
-<br/>
-#### 5. Build Hisory
-
-Jenkins comes pre-loaded with the option to browse through the "Build History" for all the configured projects. This view is presented in HTML and can be accessed via a web-browser at the following link: [http://JENKINS_IP:8080/view/All/builds](http://JENKINS_IP:8080/view/All/builds)

@@ -1,0 +1,59 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+
+
+  tasks:
+    - name: Test connection
+      ping: 
+      
+
+    # Install Node.JS
+    - name: Setup Node repo
+      shell: curl --silent --location https://rpm.nodesource.com/setup_6.x | bash -
+
+    - name: Install Node
+      yum:
+        pkg: nodejs 
+        state: installed
+        update_cache: yes
+
+
+    # Install GIT
+    - name: Install GIT
+      yum:
+        pkg: git 
+        state: installed
+        update_cache: yes
+
+
+    # Copy RedisIP
+    - name: Copy redis IP
+      copy: src=/root/redisIP dest=/root/redisIP owner=root group=root mode=0644
+
+    # Pull latesest STABLE code
+    - name: Pull Latest code from GIT
+      shell: git clone -b canary https://github.com/sasanghavi/M3.git
+      args:
+          chdir: /root/
+
+    - name: NPM install
+      shell: npm install
+      args:
+        chdir: /root/M3/app_server
+
+
+    - name: Install forever
+      shell: npm install -g forever
+
+    - name: Run Server
+      shell: forever start app.js
+      args:
+        chdir: /root/M3/app_server
+
+    - name: Add New Relic repository
+      shell: /root/M3/app_server/setupNR.sh
+      args:
+        chdir: /root/M3/app_server/
+

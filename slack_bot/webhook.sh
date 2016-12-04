@@ -1,0 +1,2 @@
+curl -X POST --data-urlencode 'payload={"channel": "#general", "username": "DDoS", "text": "`DDoS Attack` signature detected! (12345 requests/min) \n Targetted resource: http://<IP_HERE>/big.pdf \n <https://alert-system.com/alerts/1234|Ignore> | <https://alert-system.com/alerts/1234|Move Resource to CDN>", "icon_emoji": ":ghost:"}' https://hooks.slack.com/services/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
+
